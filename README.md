@@ -121,7 +121,7 @@ uvicorn main:app --reload
 
 - SQLite data resets on Railway redeploy (ephemeral disk). For persistent data, swap to Railway's PostgreSQL plugin.
 - No authentication — all users have full access. Auth can be added as FastAPI middleware.
-- No pagination — fine for the assessment volume, slots exist in the code to add it.
+- No pagination — fine for the less volume, slots exist in the code to add it.
 
 ---
 
