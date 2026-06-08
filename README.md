@@ -40,7 +40,7 @@ A lightweight customer support ticket management system built with **FastAPI**, 
 ## Project Structure
 
 ```
-datastraw-crm/
+Support-CRM-System/
 ├── routers/
 │   └── tickets.py      # REST API endpoints (/api/tickets)
 ├── static/js/
@@ -66,7 +66,7 @@ datastraw-crm/
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/YOUR_USERNAME/datastraw-crm.git
+git clone https://github.com/YOUR_USERNAME/Support-CRM-System.git
 cd datastraw-crm
 
 # 2. Create and activate virtual environment
