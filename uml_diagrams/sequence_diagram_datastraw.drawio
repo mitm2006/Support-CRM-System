@@ -1,0 +1,103 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="VUrKdYY87zV3XW00i0Lt">
+    <mxGraphModel dx="1030" dy="527" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Ks66XpdOAbuWOKfanmMN-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Support Agent" vertex="1">
+          <mxGeometry height="30" width="120" x="70" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="Ks66XpdOAbuWOKfanmMN-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Browser" vertex="1">
+          <mxGeometry height="30" width="120" x="250" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="Ks66XpdOAbuWOKfanmMN-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="FASTAPI" vertex="1">
+          <mxGeometry height="30" width="120" x="425" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="Ks66XpdOAbuWOKfanmMN-5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="SQLite" vertex="1">
+          <mxGeometry height="30" width="120" x="600" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="Ks66XpdOAbuWOKfanmMN-6" edge="1" parent="1" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="Ks66XpdOAbuWOKfanmMN-2" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="130" y="400" as="sourcePoint" />
+            <mxPoint x="450" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ks66XpdOAbuWOKfanmMN-8" edge="1" parent="1" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <Array as="points">
+              <mxPoint x="309.5" y="310" />
+            </Array>
+            <mxPoint x="310" y="400" as="sourcePoint" />
+            <mxPoint x="309.5" y="100" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ks66XpdOAbuWOKfanmMN-9" edge="1" parent="1" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="485" y="400" as="sourcePoint" />
+            <mxPoint x="484.5" y="100" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ks66XpdOAbuWOKfanmMN-10" edge="1" parent="1" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="660" y="400" as="sourcePoint" />
+            <mxPoint x="659.5" y="100" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ks66XpdOAbuWOKfanmMN-11" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="130" y="160" as="sourcePoint" />
+            <mxPoint x="310" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ks66XpdOAbuWOKfanmMN-12" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Fill &amp;amp; Submit Form" vertex="1">
+          <mxGeometry height="30" width="120" x="160" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="Ks66XpdOAbuWOKfanmMN-13" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="310" y="200" as="sourcePoint" />
+            <mxPoint x="480" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ks66XpdOAbuWOKfanmMN-14" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;span style=&quot;font-family: &amp;quot;Anthropic Sans&amp;quot;, -apple-system, BlinkMacSystemFont, &amp;quot;Segoe UI&amp;quot;, sans-serif; text-align: start; white-space: nowrap;&quot;&gt;POST /api/tickets&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="60" x="365" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="Ks66XpdOAbuWOKfanmMN-15" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="480" y="240" as="sourcePoint" />
+            <mxPoint x="660" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ks66XpdOAbuWOKfanmMN-16" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Validate + Generate TKT - ID" vertex="1">
+          <mxGeometry height="30" width="170" x="490" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="Ks66XpdOAbuWOKfanmMN-17" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="490" y="280" as="sourcePoint" />
+            <mxPoint x="660" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ks66XpdOAbuWOKfanmMN-18" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Insert Ticket" vertex="1">
+          <mxGeometry height="30" width="110" x="520" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="Ks66XpdOAbuWOKfanmMN-19" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="310" y="320" as="sourcePoint" />
+            <mxPoint x="480" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ks66XpdOAbuWOKfanmMN-20" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="TKT-ID, Created at" vertex="1">
+          <mxGeometry height="30" width="60" x="370" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="Ks66XpdOAbuWOKfanmMN-21" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="130" y="360" as="sourcePoint" />
+            <mxPoint x="310" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ks66XpdOAbuWOKfanmMN-22" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Redirect to details page" vertex="1">
+          <mxGeometry height="30" width="130" x="150" y="330" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

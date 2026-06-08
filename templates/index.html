@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Datastraw CRM — Support Dashboard</title>
+  <meta name="description" content="Datastraw CRM support ticket management dashboard. View, search, and filter all customer support tickets." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Outfit', 'sans-serif'] },
+          colors: {
+            brand: { 50:'#f0f4ff', 100:'#e0eaff', 500:'#4f6ef7', 600:'#3b5bf5', 700:'#2c48d8' },
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.4s ease-out',
+            'slide-up': 'slideUp 0.35s ease-out',
+          },
+          keyframes: {
+            fadeIn: { from:{ opacity:'0' }, to:{ opacity:'1' } },
+            slideUp: { from:{ transform:'translateY(10px)', opacity:'0' }, to:{ transform:'translateY(0)', opacity:'1' } },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background: #0f1117; color: #e2e8f0; }
+    .glass {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+    }
+    .glass-hover:hover {
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.14);
+    }
+    tr.ticket-row { cursor: pointer; transition: background 0.15s; }
+    tr.ticket-row:hover td { background: rgba(79,110,247,0.1); }
+    .tab-btn { transition: all 0.2s ease; }
+    .tab-btn.active {
+      background: #4f6ef7;
+      color: #fff;
+      box-shadow: 0 0 12px rgba(79,110,247,0.4);
+    }
+    .stat-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #1a1d2e; }
+    ::-webkit-scrollbar-thumb { background: #3b5bf5; border-radius: 3px; }
+    #search-input:focus { box-shadow: 0 0 0 3px rgba(79,110,247,0.3); }
+    .badge-open      { background:#1e3a5f; color:#60a5fa; border:1px solid #2563eb44; }
+    .badge-progress  { background:#3d2c00; color:#fbbf24; border:1px solid #d9770644; }
+    .badge-closed    { background:#14311f; color:#4ade80; border:1px solid #16a34a44; }
+    .empty-state { animation: fadeIn 0.5s ease-out; }
+  </style>
+</head>
+
+<body class="font-sans h-full">
+
+  <!-- ── Navbar ─────────────────────────────────────────────────────── -->
+  <nav class="glass border-b border-white/5 sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center text-white font-bold text-sm">DS</div>
+        <span class="font-semibold text-white text-lg tracking-tight">Datastraw <span class="text-brand-500">CRM</span></span>
+      </div>
+      <a id="nav-new-ticket" href="/create"
+         class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium transition-all duration-200 hover:shadow-lg hover:shadow-brand-500/25">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        New Ticket
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── Main Content ───────────────────────────────────────────────── -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Header -->
+    <div class="mb-8 animate-fade-in">
+      <h1 class="text-2xl sm:text-3xl font-bold text-white mb-1">Support Dashboard</h1>
+      <p class="text-slate-400 text-sm">Manage and resolve customer tickets.</p>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8 animate-slide-up">
+      <div id="stat-total" class="glass stat-card rounded-xl p-5">
+        <p class="text-slate-400 text-xs uppercase tracking-widest mb-1">Total</p>
+        <p class="text-3xl font-bold text-white" id="count-total">—</p>
+      </div>
+      <div id="stat-open" class="glass stat-card rounded-xl p-5">
+        <p class="text-blue-400 text-xs uppercase tracking-widest mb-1">Open</p>
+        <p class="text-3xl font-bold text-blue-400" id="count-open">—</p>
+      </div>
+      <div id="stat-progress" class="glass stat-card rounded-xl p-5">
+        <p class="text-amber-400 text-xs uppercase tracking-widest mb-1">In Progress</p>
+        <p class="text-3xl font-bold text-amber-400" id="count-progress">—</p>
+      </div>
+      <div id="stat-closed" class="glass stat-card rounded-xl p-5">
+        <p class="text-green-400 text-xs uppercase tracking-widest mb-1">Closed</p>
+        <p class="text-3xl font-bold text-green-400" id="count-closed">—</p>
+      </div>
+    </div>
+
+    <!-- Controls: Search + Filters -->
+    <div class="glass rounded-xl p-4 mb-4 flex flex-col sm:flex-row gap-3 items-start sm:items-center animate-slide-up">
+      <!-- Search -->
+      <div class="relative flex-1 w-full">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+        </svg>
+        <input id="search-input" type="text" placeholder="Search name, email, TKT-001…"
+               class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-brand-500 transition-all duration-200" />
+      </div>
+      <!-- Filter tabs -->
+      <div class="flex gap-2 flex-wrap">
+        <button id="tab-All"         class="tab-btn active px-4 py-2 rounded-lg text-sm font-medium text-slate-300 glass" data-status="All">All</button>
+        <button id="tab-Open"        class="tab-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-300 glass" data-status="Open">Open</button>
+        <button id="tab-In Progress" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-300 glass" data-status="In Progress">In Progress</button>
+        <button id="tab-Closed"      class="tab-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-300 glass" data-status="Closed">Closed</button>
+      </div>
+    </div>
+
+    <!-- Ticket Table -->
+    <div class="glass rounded-xl overflow-hidden animate-slide-up">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-white/5 text-slate-400 text-xs uppercase tracking-wider">
+              <th class="text-left px-6 py-4 font-medium">Ticket ID</th>
+              <th class="text-left px-6 py-4 font-medium">Customer</th>
+              <th class="text-left px-6 py-4 font-medium hidden md:table-cell">Subject</th>
+              <th class="text-left px-6 py-4 font-medium">Status</th>
+              <th class="text-left px-6 py-4 font-medium hidden sm:table-cell">Date</th>
+            </tr>
+          </thead>
+          <tbody id="ticket-table-body">
+            <!-- Filled by tickets.js -->
+          </tbody>
+        </table>
+      </div>
+      <!-- Empty State -->
+      <div id="empty-state" class="hidden empty-state text-center py-16 px-4">
+        <div class="text-5xl mb-4">🎫</div>
+        <p class="text-slate-300 font-medium text-lg mb-1">No tickets found</p>
+        <p class="text-slate-500 text-sm mb-6">Try adjusting your search or filter, or create a new ticket.</p>
+        <a href="/create" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          Create First Ticket
+        </a>
+      </div>
+      <!-- Loading State -->
+      <div id="loading-state" class="text-center py-16">
+        <div class="inline-block w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
+        <p class="text-slate-400 text-sm mt-4">Loading tickets…</p>
+      </div>
+    </div>
+
+    <!-- Result count -->
+    <p id="result-count" class="text-slate-500 text-xs mt-3 px-1"></p>
+
+  </main>
+
+  <script src="/static/js/tickets.js"></script>
+</body>
+</html>

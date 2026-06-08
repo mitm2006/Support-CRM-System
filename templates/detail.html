@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ticket Detail — Datastraw CRM</title>
+  <meta name="description" content="View and manage a customer support ticket — update status and add agent notes." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Outfit', 'sans-serif'] },
+          colors: { brand: { 500:'#4f6ef7', 600:'#3b5bf5', 700:'#2c48d8' } },
+          animation: {
+            'fade-in':  'fadeIn 0.4s ease-out',
+            'slide-up': 'slideUp 0.35s ease-out',
+            'note-in':  'noteIn 0.3s ease-out',
+          },
+          keyframes: {
+            fadeIn: { from:{ opacity:'0' }, to:{ opacity:'1' } },
+            slideUp: { from:{ transform:'translateY(12px)', opacity:'0' }, to:{ transform:'translateY(0)', opacity:'1' } },
+            noteIn: { from:{ transform:'translateX(-6px)', opacity:'0' }, to:{ transform:'translateX(0)', opacity:'1' } },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background: #0f1117; color: #e2e8f0; }
+    .glass { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(12px); }
+    .badge-open      { background:#1e3a5f; color:#60a5fa; border:1px solid #2563eb44; }
+    .badge-progress  { background:#3d2c00; color:#fbbf24; border:1px solid #d9770644; }
+    .badge-closed    { background:#14311f; color:#4ade80; border:1px solid #16a34a44; }
+    .form-input {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #e2e8f0;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input::placeholder { color: #64748b; }
+    .form-input:focus { outline: none; border-color: #4f6ef7; box-shadow: 0 0 0 3px rgba(79,110,247,0.2); }
+    select.form-input option { background: #1a1d2e; }
+    .note-item { animation: noteIn 0.3s ease-out; }
+    .update-btn { transition: all 0.2s; }
+    .update-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(79,110,247,0.4); }
+    .update-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    #toast { transition: all 0.3s ease; }
+    label { color: #94a3b8; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 500; }
+  </style>
+</head>
+
+<body class="font-sans min-h-screen">
+
+  <!-- ── Navbar ─────────────────────────────────────────────────────── -->
+  <nav class="glass border-b border-white/5 sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center h-16 gap-3">
+      <a href="/" id="nav-back" class="flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors text-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        Dashboard
+      </a>
+      <span class="text-slate-600">/</span>
+      <span id="nav-ticket-id" class="text-slate-300 text-sm font-medium">Ticket</span>
+    </div>
+  </nav>
+
+  <!-- ── Toast Notification ─────────────────────────────────────────── -->
+  <div id="toast" class="fixed top-5 right-5 z-50 hidden px-5 py-3 rounded-xl glass border border-green-500/30 bg-green-500/10 text-green-400 text-sm font-medium shadow-lg">
+    ✓ Updated successfully
+  </div>
+
+  <!-- ── Loading & Error States ─────────────────────────────────────── -->
+  <div id="loading-view" class="max-w-6xl mx-auto px-4 py-20 text-center">
+    <div class="inline-block w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
+    <p class="text-slate-400 text-sm mt-4">Loading ticket…</p>
+  </div>
+  <div id="error-view" class="hidden max-w-6xl mx-auto px-4 py-20 text-center">
+    <p class="text-5xl mb-4">⚠️</p>
+    <p class="text-white text-xl font-semibold mb-2">Ticket Not Found</p>
+    <p class="text-slate-400 text-sm mb-6">The ticket you're looking for doesn't exist.</p>
+    <a href="/" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-brand-600 text-white text-sm font-medium hover:bg-brand-700 transition-all">← Back to Dashboard</a>
+  </div>
+
+  <!-- ── Main Content ─────────────────────────────────────────────────── -->
+  <main id="main-content" class="hidden max-w-6xl mx-auto px-4 sm:px-6 py-8 animate-fade-in">
+
+    <!-- Title row -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-3">
+      <div>
+        <div class="flex items-center gap-3 mb-1">
+          <h1 id="ticket-id-title" class="text-2xl sm:text-3xl font-bold text-white"></h1>
+          <span id="status-badge" class="text-xs font-semibold px-3 py-1 rounded-full"></span>
+        </div>
+        <p id="ticket-subject-sub" class="text-slate-400 text-sm"></p>
+      </div>
+    </div>
+
+    <!-- Two-column layout -->
+    <div class="grid lg:grid-cols-5 gap-6">
+
+      <!-- LEFT: Ticket details + Update status -->
+      <div class="lg:col-span-2 space-y-5">
+
+        <!-- Ticket Info Card -->
+        <div class="glass rounded-2xl p-6 space-y-4 animate-slide-up">
+          <h2 class="text-xs uppercase tracking-widest text-slate-500 font-medium">Ticket Details</h2>
+
+          <div class="space-y-3">
+            <div>
+              <label>Customer</label>
+              <p id="detail-name" class="text-white font-medium mt-0.5 text-sm"></p>
+            </div>
+            <div>
+              <label>Email</label>
+              <p id="detail-email" class="text-brand-500 mt-0.5 text-sm break-all"></p>
+            </div>
+            <div>
+              <label>Subject</label>
+              <p id="detail-subject" class="text-white mt-0.5 text-sm"></p>
+            </div>
+            <div id="desc-container">
+              <label>Description</label>
+              <p id="detail-description" class="text-slate-300 mt-0.5 text-sm leading-relaxed whitespace-pre-wrap"></p>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-white/5 grid grid-cols-2 gap-3 text-xs text-slate-400">
+            <div>
+              <span class="block text-slate-600 uppercase tracking-wider text-xs">Created</span>
+              <span id="detail-created"></span>
+            </div>
+            <div>
+              <span class="block text-slate-600 uppercase tracking-wider text-xs">Updated</span>
+              <span id="detail-updated"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Update Status Card -->
+        <div class="glass rounded-2xl p-6 space-y-4 animate-slide-up">
+          <h2 class="text-xs uppercase tracking-widest text-slate-500 font-medium">Update Ticket</h2>
+
+          <div class="space-y-2">
+            <label for="status-select">Status</label>
+            <select id="status-select" class="form-input w-full px-4 py-3 rounded-xl text-sm">
+              <option value="Open">Open</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Closed">Closed</option>
+            </select>
+          </div>
+
+          <div class="space-y-2">
+            <label for="note-input">Add a Note <span class="text-slate-600 font-normal normal-case">(optional)</span></label>
+            <textarea id="note-input" rows="4" placeholder="Add a note about this update…"
+                      class="form-input w-full px-4 py-3 rounded-xl text-sm resize-none"></textarea>
+          </div>
+
+          <button id="update-btn"
+                  class="update-btn w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-medium text-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            Save Changes
+          </button>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: Notes Timeline -->
+      <div class="lg:col-span-3 animate-slide-up">
+        <div class="glass rounded-2xl p-6 h-full">
+          <div class="flex items-center justify-between mb-5">
+            <h2 class="text-xs uppercase tracking-widest text-slate-500 font-medium">Agent Notes</h2>
+            <span id="notes-count" class="text-xs text-slate-600 glass px-2.5 py-1 rounded-full">0 notes</span>
+          </div>
+
+          <!-- Notes list -->
+          <div id="notes-list" class="space-y-4 max-h-[600px] overflow-y-auto pr-1">
+            <!-- Filled by detail.js -->
+          </div>
+
+          <!-- Empty notes state -->
+          <div id="notes-empty" class="hidden text-center py-10">
+            <div class="text-4xl mb-3">📝</div>
+            <p class="text-slate-400 text-sm font-medium">No notes yet</p>
+            <p class="text-slate-600 text-xs mt-1">Add a note using the form on the left.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="/static/js/detail.js"></script>
+</body>
+</html>
