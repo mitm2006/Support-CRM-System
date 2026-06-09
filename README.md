@@ -20,7 +20,7 @@ A lightweight customer support ticket management system built with **FastAPI**, 
 | Filter by Open / In Progress / Closed | ✅ |
 | View full ticket detail | ✅ |
 | Update ticket status via dropdown | ✅ |
-| Add agent notes to a ticket (bonus) | ✅ |
+| Add agent notes to a ticket | ✅ |
 | Mobile-responsive layout | ✅ |
 
 ---
